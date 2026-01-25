@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "357951390056",
+    "project_id": "automobile-app-8f4a3",
+    "storage_bucket": "automobile-app-8f4a3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357951390056:android:351b177b84938d19f296dd",
+        "android_client_info": {
+          "package_name": "com.example.automobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHvMy1vNDN3VPKdGoeGybauLAmGV1Taio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
