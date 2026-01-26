@@ -42,14 +42,19 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // This will auto-create account in Firebase
-      await _authService.signInOrRegister(email, password);
-      await UserService.instance.setFromEmail(email);
+      // Create account in Firebase Authentication
+      final credential = await _authService.signInOrRegister(email, password);
+      
+      // Save user profile to Firestore
+      await UserService.instance.createUserInFirestore(
+        email,
+        userId: credential?.user?.uid,
+      );
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Account created in Firebase! ✅'),
+            content: Text('Account created successfully! ✅ Data saved to Firebase'),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 2),
           ),

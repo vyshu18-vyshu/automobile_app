@@ -39,19 +39,38 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // DEVELOPMENT MODE: This will accept ANY email/password combination
+      // Sign in with Firebase (or development mode)
       final credential = await _authService.signInOrRegister(email, password);
       
-      // Update user service with email
-      await UserService.instance.setFromEmail(email);
+      // Try to fetch user data from Firestore
+      final userData = await UserService.instance.getUserFromFirestore(
+        userId: credential?.user?.uid,
+      );
+      
+      // If user data exists, update last sign-in
+      if (userData != null) {
+        await UserService.instance.updateLastSignIn(
+          userId: credential?.user?.uid,
+        );
+      } else {
+        // Fallback to local storage if Firestore fetch fails
+        await UserService.instance.setFromEmail(
+          email,
+          userId: credential?.user?.uid,
+        );
+      }
       
       if (mounted) {
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('✅ Login Successful! (Development Mode - Any credentials accepted)'),
+          SnackBar(
+            content: Text(
+              userData != null 
+                ? '✅ Welcome back, ${userData.displayName}!'
+                : '✅ Login Successful! (Development Mode)',
+            ),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
         Navigator.pushReplacementNamed(context, '/main');
